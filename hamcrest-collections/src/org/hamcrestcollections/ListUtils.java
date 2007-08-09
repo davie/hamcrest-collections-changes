@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
+/**
+ * Some general utility functions for working with lists
+ *
+ * @author Sam Newman (sam-newman@magpiebrain.com)
+ */
 public class ListUtils {
     public static <T> List<T> asList(Iterable<T> iterable) {
         if (List.class.isAssignableFrom(iterable.getClass())) {

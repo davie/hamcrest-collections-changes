@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="hamcrest-collections" default="dist">
+    <property name="version" value="0.1a"/>
+    <property name="lib.dir" location="lib"/>
+    <property name="src.dir" location="src"/>
+    <property name="test-src.dir" location="test"/>
+    <property name="build.dir" location="build"/>
+    <property name="test-temp.dir" value="${build.dir}/temp-test"/>
+    <property name="dist.dir" value="${build.dir}/dist"/>
+    <property name="api-doc.dir" value="${build.dir}/javadoc" />
+    <property name="project-name" value="hamcrest-collections"/>
+    <property name="built-classes.dir" value="${build.dir}/classes"/>
+
+    <property name="binary-jar.name" value="${project-name}-${version}.jar"/>
+    <property name="javadoc-zip.name" value="${project-name}-apidoc-${version}.zip" />
+    <property name="uber-zip.name" value="${project-name}-all-${version}.zip" />
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${built-classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${test-temp.dir}"/>
+    </target>
+
+    <path id="compile-dependencies.ref">
+        <pathelement location="${lib.dir}/hamcrest-all-1.1.jar"/>
+    </path>
+
+    <path id="test-dependencies.ref">
+        <path refid="compile-dependencies.ref"/>
+        <path path="${built-classes.dir}"/>
+        <pathelement location="${lib.dir}/jmock-core-1.2.0.jar"/>
+        <pathelement location="${lib.dir}/junit-4.3.1.jar"/>
+    </path>
+
+
+    <target name="-compile-tests" depends="clean, compile">
+        <javac taskname="Compile Test Source" destdir="${built-classes.dir}" debug="true">
+            <classpath refid="test-dependencies.ref"/>
+            <src path="${test-src.dir}"/>
+        </javac>
+    </target>
+
+    <target name="compile" depends="clean">
+        <javac taskname="Compile Prod Source" destdir="${built-classes.dir}" debug="true">
+            <classpath refid="compile-dependencies.ref"/>
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+
+
+    <target name="run-tests" depends="-compile-tests">
+        <copy todir="${built-classes.dir}">
+            <fileset dir="${test-src.dir}">
+                <include name="**/*.xml"/>
+            </fileset>
+        </copy>
+        <junit fork="yes" dir=".." forkmode="once" tempdir="${test-temp.dir}" haltonfailure="true">
+            <classpath>
+                <path refid="test-dependencies.ref"/>
+            </classpath>
+
+            <formatter type="plain" usefile="false"/>
+
+            <batchtest>
+                <fileset dir="${test-src.dir}">
+                    <include name="**/*Test*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="create-jar" depends="compile">
+        <jar destfile="${dist.dir}/${binary-jar.name}" basedir="${built-classes.dir}" excludes="**/Test.class">
+            <manifest>
+                <attribute name="Version" value="${version}"/>
+                <attribute name="Class-Path" value="hamcrest-all-1.1.jar"/>
+            </manifest>
+            <fileset dir="${src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="create-javadoc" depends="compile">
+        <mkdir dir="${api-doc.dir}" />
+        <javadoc destdir="${api-doc.dir}" sourcepath="${src.dir}" />
+    </target>
+
+    <target name="create-javadoc-zip" depends="create-javadoc">
+        <zip destfile="${dist.dir}/${javadoc-zip.name}" basedir="${api-doc.dir}" />
+    </target>
+
+    <target name="create-uber-zip" depends="create-javadoc-zip, create-jar">
+        <zip destfile="${dist.dir}/${uber-zip.name}">
+            <fileset dir="${dist.dir}">
+                <include name="${javadoc-zip.name}" />
+                <include name="${binary-jar.name}" />
+            </fileset>
+        </zip>
+    </target>
+
+    <target name="dist" depends="run-tests, create-uber-zip" description="Runs all tests and builds a binary jar"/>
+</project>

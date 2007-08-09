@@ -6,7 +6,7 @@ import org.jmock.MockObjectTestCase;
 import java.util.List;
 
 public class FunctionMapTest extends MockObjectTestCase {
-    public void tetsShouldRunFunctionOnAllItems() {
+    public void testShouldRunFunctionOnAllItems() {
         Mock functionMock = mock(Function.class);
 
         functionMock.expects(once()).method("apply").with(eq(1)).will(returnValue("Hello"));
@@ -15,5 +15,4 @@ public class FunctionMapTest extends MockObjectTestCase {
         List<Integer> ints = ListUtils.listWith(1, 2);
         FunctionMapper.map(ints, (Function<Integer,String>)functionMock.proxy());
     }
-    
 }

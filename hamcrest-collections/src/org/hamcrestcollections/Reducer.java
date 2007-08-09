@@ -1,29 +1,18 @@
 package org.hamcrestcollections;
 
-import java.util.List;
-
-public class Reducer {
-    public static <T> T reduce(Iterable<T> iterable, Reduction<T> reduction) {
-        List<T> items = ListUtils.asList(iterable);
-        T currentValue = null;
-
-        if (items.size() == 0) {
-            throw new InvalidReductionException("Cannot reduce zero items");
-        }
-        
-        if (items.size() == 1) {
-            return items.get(0);
-        }
-
-        T first = items.get(0);
-        T second = items.get(1);
-        currentValue = reduction.apply(first, second);
-
-        for (int i = 2; i < items.size(); i++) {
-            currentValue = reduction.apply(currentValue, items.get(i));
-        }
-        
-        return currentValue;
-    }
-
+/**
+ * <p>
+ * A {@code Reducer} quite literally reduces two arguments down to one. Used as part of a {@link Reduction}.
+ * </p>
+ *
+ * <p>
+ * Examples of a {@code Reducer} might include a sum function that adds all the items of a list together, or a
+ * string builder used to concatinate many strings together
+ * </p?
+ *
+ * @see Reduction
+ * @author Sam Newman (sam-newman@magpiebrain.com)
+ */
+public interface Reducer<T> {
+    T apply(T first, T second);
 }

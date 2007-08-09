@@ -2,7 +2,7 @@ package org.hamcrestcollections;
 
 import junit.framework.TestCase;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrestcollections.SelectMatcher.select;
+import static org.hamcrestcollections.Selector.select;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +16,13 @@ public class SelectMatcherTest extends TestCase {
         ints.add(2);
         ints.add(2);
         ints.add(4);
+
+        List<Integer> matching = ListUtils.asList(select(ints, equalTo(2)));
+        ListUtils.containsExactly(matching, 2, 2);
+    }
+
+    public void testShouldApplyMatcherToAllItemsInArray() {
+        Integer ints[] = {1, 2, 2, 4};
 
         List<Integer> matching = ListUtils.asList(select(ints, equalTo(2)));
         ListUtils.containsExactly(matching, 2, 2);
