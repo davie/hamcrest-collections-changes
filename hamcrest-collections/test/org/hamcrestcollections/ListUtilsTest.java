@@ -36,14 +36,14 @@ public class ListUtilsTest {
 
     @Test
     public void testShouldReturnLastEntryAsTail() throws InvalidArgumentException {
-        String head = ListUtils.tail("first", "middle", "last");
-        assertEquals("last", head);
+        String tail = ListUtils.tail("first", "middle", "last");
+        assertEquals("last", tail);
     }
 
     @Test
     public void testShouldReturnLastEntryOfListAsTail() throws InvalidArgumentException {
-        String head = ListUtils.tail(Arrays.asList("first", "middle", "last"));
-        assertEquals("last", head);
+        String tail = ListUtils.tail(Arrays.asList("first", "middle", "last"));
+        assertEquals("last", tail);
     }
 
     @Test(expected = InvalidArgumentException.class)
