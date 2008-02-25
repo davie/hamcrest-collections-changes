@@ -1,5 +1,9 @@
 package org.hamcrestcollections;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Description;
+import org.hamcrest.BaseMatcher;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;

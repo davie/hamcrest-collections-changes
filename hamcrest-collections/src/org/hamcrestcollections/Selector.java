@@ -46,10 +46,10 @@ public class Selector {
     }
 
     public static <T> Iterable<T> select(T items[], Matcher<T> matcher) {
-        return returnMathcing(items, matcher);
+        return returnMatching(items, matcher);
     }
 
-    private static <T> Iterable<T> returnMathcing(T[] items, Matcher<T> matcher) {
+    private static <T> Iterable<T> returnMatching(T[] items, Matcher<T> matcher) {
         List<T> matching = new ArrayList<T>();
 
         for (T item : items) {
