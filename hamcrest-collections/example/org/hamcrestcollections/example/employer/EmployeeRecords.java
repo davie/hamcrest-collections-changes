@@ -7,7 +7,8 @@ import java.util.List;
 public class EmployeeRecords {
     public static Employee DEREK = new Employee(25, "Derek", 15000);
     public static Employee CLIVE = new Employee(28, "Clive", 25000);
+    public static Employee BOB = new Employee(28, "Bob", 26000);
     public static Employee NORMAN = new Employee(45, "Norman", 38000);
     public static List<Employee> ALL =
-          ListUtils.listWith(EmployeeRecords.CLIVE, EmployeeRecords.DEREK, EmployeeRecords.NORMAN);
+          ListUtils.listWith(EmployeeRecords.CLIVE, EmployeeRecords.DEREK, EmployeeRecords.BOB, EmployeeRecords.NORMAN);
 }

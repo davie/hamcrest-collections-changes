@@ -16,4 +16,8 @@ public class Employee {
     public String toString() {
         return name;
     }
+
+    public int getAge() {
+        return age;
+    }
 }
