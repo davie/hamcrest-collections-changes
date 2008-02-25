@@ -2,7 +2,11 @@ package org.hamcrestcollections;
 
 import junit.framework.TestCase;
 import static org.hamcrest.core.IsEqual.equalTo;
+import org.hamcrest.Matcher;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import static org.hamcrestcollections.Selector.select;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,13 +22,33 @@ public class SelectMatcherTest extends TestCase {
         ints.add(4);
 
         List<Integer> matching = ListUtils.asList(select(ints, equalTo(2)));
-        ListUtils.containsExactly(matching, 2, 2);
+        assertTrue(ListUtils.containsExactly(matching, 2, 2));
     }
 
     public void testShouldApplyMatcherToAllItemsInArray() {
         Integer ints[] = {1, 2, 2, 4};
 
         List<Integer> matching = ListUtils.asList(select(ints, equalTo(2)));
-        ListUtils.containsExactly(matching, 2, 2);
+        assertTrue(ListUtils.containsExactly(matching, 2, 2));
     }
+
+//    public void testSelectHeadReturnsFirstItem() {
+//        Integer ints[] = {1, 2, 2, 4};
+//
+//        List<Integer> matching = ListUtils.asList(select(ints, head()));
+//        ListUtils.containsExactly(matching, 1, 2);
+//    }
+//
+//    private Matcher<Integer> head() {
+//        return new BaseMatcher(){
+//            public boolean matches(Object o) {
+//
+//                return false;  //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            public void describeTo(Description description) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//        };
+//    }
 }

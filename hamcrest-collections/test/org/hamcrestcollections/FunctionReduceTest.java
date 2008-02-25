@@ -4,7 +4,9 @@ import junit.framework.TestCase;
 
 import java.util.List;
 
-public class FunctionReduceTest extends TestCase {
+import org.junit.Test;import static org.junit.Assert.assertEquals;
+
+public class FunctionReduceTest {
 
     public void testShouldReduceElementsInCollection() {
         List<Integer> list = ListUtils.listWith(1, 2, 3);
@@ -21,15 +23,10 @@ public class FunctionReduceTest extends TestCase {
         assertEquals(1, (int) Reduction.reduce(list, new Sum()));
     }
 
+    @Test(expected = InvalidReductionException.class)
     public void testShouldNotReduceEmptyValues() {
         List<Integer> list = ListUtils.emptyList();
-
-        try {
-            Reduction.reduce(list, new Sum());
-            fail("InvalidReductionException expected");
-        } catch (InvalidReductionException e) {
-            //expected
-        }
+        Reduction.reduce(list, new Sum());
     }
 
     public static class Sum implements Reducer<Integer> {

@@ -15,6 +15,6 @@ public class RejectMatcherTest extends TestCase {
         ints.add(4);
 
         List<Integer> remaining = ListUtils.asList(RejectMatcher.reject(ints, org.hamcrest.Matchers.greaterThan(2)));
-        ListUtils.containsExactly(remaining, 1, 2);
+        assertTrue(ListUtils.containsExactly(remaining, 1, 2));
     }
 }
