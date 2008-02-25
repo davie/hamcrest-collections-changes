@@ -7,6 +7,9 @@ import org.hamcrest.BaseMatcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Collections;
+
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 /**
  * Some general utility functions for working with lists
@@ -47,5 +50,29 @@ public class ListUtils {
 
     public static <T> List<T> emptyList() {
         return new ArrayList<T>();
+    }
+
+    public static <T> T head(T... values) {
+        List<T> listOfValues = Arrays.asList(values);
+        return head(listOfValues);
+    }
+
+    // TODO change to Iterable
+    public static <T> T head(List<T> list) {
+        if(list.size() == 0){
+            throw new RuntimeException("attempted to find head of wmpty list");
+        }
+        return list.get(0);
+    }
+
+    public static <T> T tail(T... values) throws InvalidArgumentException {
+        return tail(Arrays.asList(values));
+    }
+
+    public static <T> T tail(List<T> values) throws InvalidArgumentException {
+        if(values.size() == 0){
+            throw new InvalidArgumentException(new String[]{"Should not call tail on an emtpy array"});
+        }
+        return values.get(values.size() - 1);
     }
 }
