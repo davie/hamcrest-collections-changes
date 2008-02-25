@@ -4,10 +4,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Description;
 import org.hamcrest.BaseMatcher;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
@@ -57,22 +54,29 @@ public class ListUtils {
         return head(listOfValues);
     }
 
-    // TODO change to Iterable
-    public static <T> T head(List<T> list) {
-        if(list.size() == 0){
-            throw new RuntimeException("attempted to find head of wmpty list");
+    public static <T> T head(Iterable<T> list) {
+        Iterator<T> iterator = list.iterator();
+        if(!iterator.hasNext()){
+            throw new RuntimeException("Attempted to find head of empty list");
         }
-        return list.get(0);
+        return iterator.next();
     }
 
     public static <T> T tail(T... values) throws InvalidArgumentException {
         return tail(Arrays.asList(values));
     }
 
-    public static <T> T tail(List<T> values) throws InvalidArgumentException {
-        if(values.size() == 0){
-            throw new InvalidArgumentException(new String[]{"Should not call tail on an emtpy array"});
+    public static <T> T tail(Iterable<T> values) throws InvalidArgumentException {
+        Iterator<T> iterator = values.iterator();
+        if(!iterator.hasNext()){
+            throw new InvalidArgumentException(new String[]{"Attempted to call tail on an emtpy list"});
         }
-        return values.get(values.size() - 1);
+        
+        T value = null;
+        while(iterator.hasNext()){
+            value = iterator.next();
+        }
+
+        return value;
     }
 }
