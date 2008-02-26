@@ -35,10 +35,9 @@ public class EmployeeFinder {
         }
     };
 
-    public EmployeeFinder(List<Object> MY_EMPLOYEES) {
-        this.employees = MY_EMPLOYEES;
+    public EmployeeFinder(List<Object> employees) {
+        this.employees = employees;
     }
-
 
     private static class Me {}
 
