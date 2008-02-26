@@ -5,53 +5,52 @@ import org.hamcrestcollections.Function;
 import org.hamcrestcollections.FunctionMapper;
 import static org.hamcrestcollections.RejectMatcher.reject;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import org.hamcrest.beans.HasPropertyWithValue;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.util.List;
 import java.util.ArrayList;
 
 public class EmployeeFinder {
-    private List<Object> employees;
+    private List<Employee> employees;
 
-    public EmployeeFinder(List<Object> employees) {
+    public EmployeeFinder(List<Employee> employees) {
         this.employees = employees;
     }
 
     public static void main(String[] args) {
-        List<Object> myEmployees = new ArrayList<Object>();
+        List<Employee> myEmployees = new ArrayList<Employee>();
 
         myEmployees.addAll(EmployeeRecords.ALL);
-        myEmployees.add(new Me());
-        myEmployees.add(new You(28));
 
         // Find all entries in the list (maybe employees) with a property called age that
         // has a value of 28.
-        Iterable<Object> chosenEmployees = new EmployeeFinder(myEmployees).findWithAge(28);
+        Iterable<Employee> chosenEmployees = new EmployeeFinder(myEmployees).findWithAge(28);
         FunctionMapper.map(chosenEmployees, stdoutEmployeePrinter());
 
 
-        Iterable<Object> lessChosenEmployees = reject(myEmployees, hasProperty("age", equalTo(28)));
+        Iterable<Employee> lessChosenEmployees = reject(myEmployees, HasPropertyWithValue.<Employee>hasProperty("age", equalTo(28)));
         FunctionMapper.map(lessChosenEmployees, employeeFirer());
 
 
     }
 
-    private Iterable<Object> findWithAge(Integer idealEmployeeAge) {
-        return select(employees, hasProperty("age", equalTo(idealEmployeeAge)));
+    private Iterable<Employee> findWithAge(Integer idealEmployeeAge) {
+        return select(employees, HasPropertyWithValue.<Employee>hasProperty("age", equalTo(idealEmployeeAge)));
     }
 
-    private static Function<Object, Object> employeeFirer() {
-        return new Function<Object, Object>() {
-           public Object apply(Object employee) {
+    private static Function<Employee, Object> employeeFirer() {
+        return new Function<Employee, Object>() {
+           public Object apply(Employee employee) {
                 System.out.println("firing " + employee);
                 return null;
             }
         };
     }
 
-    private static Function<Object, Object> stdoutEmployeePrinter() {
-        return new Function<Object, Object>() {
-           public Object apply(Object employee) {
+    private static Function<Employee, Object> stdoutEmployeePrinter() {
+        return new Function<Employee, Object>() {
+           public Object apply(Employee employee) {
               System.out.println("thing = " + employee);
               return null;
           }

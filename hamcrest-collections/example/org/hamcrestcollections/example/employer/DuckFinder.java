@@ -11,48 +11,46 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DuckFinder {
-    private List<Object> employees;
+    private List<Object> animals;
 
-    public DuckFinder(List<Object> employees) {
-        this.employees = employees;
+    public DuckFinder(List<Object> animals) {
+        this.animals = animals;
     }
 
     public static void main(String[] args) {
-        List<Object> myEmployees = new ArrayList<Object>();
+        List<Object> animals = new ArrayList<Object>();
 
-        myEmployees.addAll(EmployeeRecords.ALL);
-        myEmployees.add(new Me());
-        myEmployees.add(new You(28));
+        animals.addAll(EmployeeRecords.ALL);
+        animals.add(new Me());
+        animals.add(new You(28));
 
         // Find all entries in the list (maybe employees) with a property called age that
         // has a value of 28.
-        Iterable<Object> chosenEmployees = new DuckFinder(myEmployees).findWithAge(28);
-        FunctionMapper.map(chosenEmployees, stdoutEmployeePrinter());
+        Iterable<Object> chosenEmployees = new DuckFinder(animals).findWithAge(28);
+        FunctionMapper.map(chosenEmployees, stdoutAnimalPrinter());
 
 
-        Iterable<Object> lessChosenEmployees = reject(myEmployees, hasProperty("age", equalTo(28)));
-        FunctionMapper.map(lessChosenEmployees, employeeFirer());
-
-
+        Iterable<Object> lessChosenEmployees = reject(animals, hasProperty("age", equalTo(28)));
+        FunctionMapper.map(lessChosenEmployees, animalRoaster());
     }
 
-    private Iterable<Object> findWithAge(Integer idealEmployeeAge) {
-        return select(employees, hasProperty("age", equalTo(idealEmployeeAge)));
+    private Iterable<Object> findWithAge(Integer idealDuckAge) {
+        return select(animals, hasProperty("age", equalTo(idealDuckAge)));
     }
 
-    private static Function<Object, Object> employeeFirer() {
+    private static Function<Object, Object> animalRoaster() {
         return new Function<Object, Object>() {
-           public Object apply(Object employee) {
-                System.out.println("firing " + employee);
+           public Object apply(Object animal) {
+                System.out.println("firing " + animal);
                 return null;
             }
         };
     }
 
-    private static Function<Object, Object> stdoutEmployeePrinter() {
+    private static Function<Object, Object> stdoutAnimalPrinter() {
         return new Function<Object, Object>() {
-           public Object apply(Object employee) {
-              System.out.println("thing = " + employee);
+           public Object apply(Object animal) {
+              System.out.println("thing = " + animal);
               return null;
           }
         };
