@@ -38,28 +38,28 @@ public class EmployeeFinder {
 
     private Iterable<Employee> findWithAge(Integer idealEmployeeAge) {
 //        return select(employees, HasPropertyWithValue.<Employee>hasProperty("age", equalTo(idealEmployeeAge)));
-        return select(employees, fieldMatcher(new Getter<Employee>() {
+        return select(employees, fieldMatcher(new Getter<Employee, Integer>() {
             public Integer get(Employee employee) {
                 return employee.getAge(); 
             }
         }, idealEmployeeAge));
     }
 
-    private <T> FieldMatcher<T> fieldMatcher(Getter<T> getter, int value) {
-        return new FieldMatcher<T>(getter, value);
+    private <T, R> FieldMatcher<T, R> fieldMatcher(Getter<T, R> getter, int value) {
+        return new FieldMatcher<T, R>(getter, value);
     }
 
-    private static class FieldMatcher<T> extends TypeSafeMatcher<T>{
-        private Getter getter;
+    private static class FieldMatcher<T, R> extends TypeSafeMatcher<T>{
+        private Getter<T, R> getter;
         private Integer value;
 
-        public FieldMatcher(Getter<T> getter, Integer value) {
+        public FieldMatcher(Getter<T, R> getter, Integer value) {
             this.getter = getter;
             this.value = value;
         }
 
         public boolean matchesSafely(T employee) {
-            Object value = getter.get(employee);
+            R value = getter.get(employee);
             if(this.value.equals(value)){
                 return true;
             }
@@ -71,8 +71,8 @@ public class EmployeeFinder {
         }
     }
 
-    public interface Getter<T>{
-        Object get(T from);
+    public interface Getter<T, R>{
+        R get(T from);
     }
 
     private static Function<Employee, Object> employeeFirer() {
