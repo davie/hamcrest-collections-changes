@@ -42,23 +42,23 @@ public class EmployeeFinder {
             public Integer get(Employee employee) {
                 return employee.getAge(); 
             }
-        }, 28));
+        }, idealEmployeeAge));
     }
 
-    private FieldMatcher fieldMatcher(Getter<Employee> getter, int value) {
-        return new FieldMatcher(getter, value);
+    private <T> FieldMatcher<T> fieldMatcher(Getter<T> getter, int value) {
+        return new FieldMatcher<T>(getter, value);
     }
 
-    private static class FieldMatcher extends TypeSafeMatcher<Employee>{
+    private static class FieldMatcher<T> extends TypeSafeMatcher<T>{
         private Getter getter;
         private Integer value;
 
-        public FieldMatcher(Getter<Employee> getter, Integer value) {
+        public FieldMatcher(Getter<T> getter, Integer value) {
             this.getter = getter;
             this.value = value;
         }
 
-        public boolean matchesSafely(Employee employee) {
+        public boolean matchesSafely(T employee) {
             Object value = getter.get(employee);
             if(this.value.equals(value)){
                 return true;
