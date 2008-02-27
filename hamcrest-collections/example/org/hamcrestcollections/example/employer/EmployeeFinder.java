@@ -8,6 +8,7 @@ import org.hamcrest.beans.HasPropertyWithValue;
 import static org.hamcrest.Matchers.equalTo;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.Matcher;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -38,29 +39,30 @@ public class EmployeeFinder {
 
     private Iterable<Employee> findWithAge(Integer idealEmployeeAge) {
 //        return select(employees, HasPropertyWithValue.<Employee>hasProperty("age", equalTo(idealEmployeeAge)));
-        return select(employees, fieldMatcher(new Getter<Employee, Integer>() {
+        Getter<Employee, Integer> ageGetter = new Getter<Employee, Integer>() {
             public Integer get(Employee employee) {
-                return employee.getAge(); 
+                return employee.getAge();
             }
-        }, idealEmployeeAge));
+        };
+        return select(employees, fieldMatcher(ageGetter, equalTo(idealEmployeeAge)));
     }
 
-    private <T, R> FieldMatcher<T, R> fieldMatcher(Getter<T, R> getter, int value) {
+    private static <T, R> FieldMatcher<T, R> fieldMatcher(Getter<T, R> getter, Matcher<R> value) {
         return new FieldMatcher<T, R>(getter, value);
     }
 
     private static class FieldMatcher<T, R> extends TypeSafeMatcher<T>{
         private Getter<T, R> getter;
-        private Integer value;
+        private Matcher<R> matcher;
 
-        public FieldMatcher(Getter<T, R> getter, Integer value) {
+        public FieldMatcher(Getter<T, R> getter, Matcher<R> matcher) {
             this.getter = getter;
-            this.value = value;
+            this.matcher = matcher;
         }
 
         public boolean matchesSafely(T employee) {
             R value = getter.get(employee);
-            if(this.value.equals(value)){
+            if(this.matcher.matches(value)){
                 return true;
             }
             return false;  
@@ -93,22 +95,4 @@ public class EmployeeFinder {
         };
     }
 
-    private static class Me {}
-
-    public static class You {
-        private You(int age) {
-            this.age = age;
-        }
-
-        public String toString() {
-            return "You can't hide, your age is: " + age;
-        }
-
-        private final int age;
-
-        public int getAge() {
-            return age;
-
-        }
-    }
 }
