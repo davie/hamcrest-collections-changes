@@ -4,9 +4,10 @@ import static org.hamcrestcollections.Selector.select;
 import org.hamcrestcollections.Function;
 import org.hamcrestcollections.FunctionMapper;
 import static org.hamcrestcollections.RejectMatcher.reject;
-import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import org.hamcrest.beans.HasPropertyWithValue;
 import static org.hamcrest.Matchers.equalTo;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -36,7 +37,42 @@ public class EmployeeFinder {
     }
 
     private Iterable<Employee> findWithAge(Integer idealEmployeeAge) {
-        return select(employees, HasPropertyWithValue.<Employee>hasProperty("age", equalTo(idealEmployeeAge)));
+//        return select(employees, HasPropertyWithValue.<Employee>hasProperty("age", equalTo(idealEmployeeAge)));
+        return select(employees, fieldMatcher(new Getter<Employee>() {
+            public Integer get(Employee employee) {
+                return employee.getAge(); 
+            }
+        }, 28));
+    }
+
+    private FieldMatcher fieldMatcher(Getter<Employee> getter, int value) {
+        return new FieldMatcher(getter, value);
+    }
+
+    private static class FieldMatcher extends TypeSafeMatcher<Employee>{
+        private Getter getter;
+        private Integer value;
+
+        public FieldMatcher(Getter<Employee> getter, Integer value) {
+            this.getter = getter;
+            this.value = value;
+        }
+
+        public boolean matchesSafely(Employee employee) {
+            Object value = getter.get(employee);
+            if(this.value.equals(value)){
+                return true;
+            }
+            return false;  
+        }
+
+        public void describeTo(Description description) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+    }
+
+    public interface Getter<T>{
+        Object get(T from);
     }
 
     private static Function<Employee, Object> employeeFirer() {
