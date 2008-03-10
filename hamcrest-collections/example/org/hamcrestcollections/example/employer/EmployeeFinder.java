@@ -43,6 +43,10 @@ public class EmployeeFinder {
             public Integer get(Employee employee) {
                 return employee.getAge();
             }
+
+            public String getDescription() {
+                return "age";
+            }
         };
         return select(employees, fieldMatcher(ageGetter, equalTo(idealEmployeeAge)));
     }
@@ -62,19 +66,21 @@ public class EmployeeFinder {
 
         public boolean matchesSafely(T employee) {
             R value = getter.get(employee);
-            if(this.matcher.matches(value)){
-                return true;
-            }
-            return false;  
+
+            return matcher.matches(value);
         }
 
         public void describeTo(Description description) {
-            //To change body of implemented methods use File | Settings | File Templates.
+            description.appendText("field ").appendText(this.getter.getDescription())
+                       .appendText(" matches ");
+            matcher.describeTo(description);
         }
     }
 
     public interface Getter<T, R>{
         R get(T from);
+
+        String getDescription();
     }
 
     private static Function<Employee, Object> employeeFirer() {
